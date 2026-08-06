@@ -1,197 +1,384 @@
-# Database Class
+# 📚 School Library Management System
 
-## Lokasi
+## Overview
 
-```text
-app/config/Database.php
+School Library Management System adalah aplikasi berbasis **PHP Native** yang dikembangkan menggunakan arsitektur **MVC (Model-View-Controller)** dengan pendekatan **Object-Oriented Programming (OOP)**.
+
+Sistem ini dirancang sebagai pondasi untuk membangun aplikasi perpustakaan sekolah yang aman, mudah dikembangkan, dan menerapkan **Role-Based Access Control (RBAC)** sebagai mekanisme otorisasi pengguna.
+
+---
+
+# Project Goals
+
+* Membangun sistem dengan arsitektur yang rapi.
+* Menerapkan konsep MVC tanpa framework.
+* Mengimplementasikan autentikasi dan otorisasi menggunakan RBAC.
+* Menghasilkan kode yang mudah dipelihara (Maintainable).
+* Menjadi portofolio Full Stack Web Developer.
+
+---
+
+# Technology Stack
+
+## Backend
+
+* PHP Native (OOP)
+* MySQLi Object Oriented
+* MVC Architecture
+
+## Database
+
+* MySQL / MariaDB
+
+## Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+
+---
+
+# Architecture
+
 ```
-
----
-
-## Deskripsi
-
-`Database.php` merupakan class yang bertanggung jawab untuk membangun dan mengelola koneksi antara aplikasi dengan database MySQL.
-
-Class ini menjadi pusat koneksi database sehingga seluruh model dalam aplikasi menggunakan sumber koneksi yang sama.
-
----
-
-## Tanggung Jawab
-
-* Menyimpan konfigurasi database.
-* Membuat koneksi ke MySQL.
-* Memastikan koneksi berhasil.
-* Mengatur karakter database menjadi `utf8mb4`.
-* Mengembalikan objek koneksi (`mysqli`) kepada model yang membutuhkan.
-
----
-
-## Struktur Class
-
-```text
-Database
-│
-├── host
-├── database
-├── username
-├── password
-├── connection
-│
-└── connect()
-```
-
----
-
-## Property
-
-### `$host`
-
-Alamat server database.
-
-Contoh:
-
-```php
-localhost
-```
-
----
-
-### `$database`
-
-Nama database yang akan digunakan.
-
-Contoh:
-
-```php
-school_library_db
-```
-
----
-
-### `$username`
-
-Username MySQL.
-
-Contoh:
-
-```php
-root
-```
-
----
-
-### `$password`
-
-Password MySQL.
-
-Pada Laragon atau XAMPP biasanya dikosongkan.
-
----
-
-### `$connection`
-
-Menyimpan objek koneksi `mysqli`.
-
-Nilai awal adalah `null` dan akan diisi setelah koneksi berhasil dibuat.
-
----
-
-## Method
-
-### `connect()`
-
-Method ini digunakan untuk membuat koneksi ke database.
-
-Jika koneksi belum pernah dibuat maka class akan:
-
-1. Membuat objek `mysqli`.
-2. Memeriksa apakah koneksi berhasil.
-3. Mengatur charset menjadi `utf8mb4`.
-4. Mengembalikan objek koneksi.
-
-Apabila koneksi sudah pernah dibuat sebelumnya, method ini akan langsung mengembalikan koneksi tersebut tanpa membuat koneksi baru.
-
----
-
-## Alur Kerja
-
-```text
-Aplikasi
-    │
-    ▼
-Database::connect()
-    │
-    ▼
-Membuat koneksi MySQL
-    │
-    ▼
-Cek Error
-    │
-    ▼
-Set Charset utf8mb4
-    │
-    ▼
-Return mysqli Connection
-```
-
----
-
-## Cara Menggunakan
-
-```php
-require_once '../config/Database.php';
-
-$database = new Database();
-
-$conn = $database->connect();
-```
-
----
-
-## Kenapa Menggunakan Class?
-
-Keuntungan menggunakan class dibandingkan pendekatan procedural:
-
-* Kode lebih rapi.
-* Mudah dikembangkan.
-* Mendukung konsep Object Oriented Programming (OOP).
-* Seluruh model menggunakan pola koneksi yang sama.
-* Memudahkan migrasi ke framework seperti Laravel di masa mendatang.
-
----
-
-## Hubungan Dengan MVC
-
-```text
+Client
+   │
+   ▼
 Controller
-      │
-      ▼
+   │
+   ▼
 Model
-      │
-      ▼
+   │
+   ▼
 Database
-      │
-      ▼
-MySQL
 ```
 
-Controller tidak berkomunikasi langsung dengan database.
+View hanya bertugas menampilkan data.
 
-Seluruh akses database dilakukan melalui Model, sedangkan Model memperoleh koneksi dari `Database.php`.
+Controller mengatur alur aplikasi.
+
+Model bertugas berkomunikasi dengan database.
 
 ---
 
-## Catatan
+# Project Structure
 
-Class ini hanya bertanggung jawab terhadap koneksi database.
+```
+school-library/
 
-Class ini **tidak** boleh berisi:
+app/
+│
+├── config/
+│      Database.php
+│
+├── controllers/
+│      AuthController.php
+│      DashboardController.php
+│
+├── helpers/
+│      auth.php
+│
+├── middleware/
+│      auth.php
+│      permission.php
+│
+├── models/
+│      BaseModel.php
+│      User.php
+│      Role.php
+│      Permission.php
+│      LibraryVisit.php
+│
+├── views/
+│      auth/
+│      dashboard/
+│      library/
+│
+public/
+│
+├── login.php
+├── logout.php
+├── dashboard.php
+│
+assets/
+database/
+vendor/
+```
 
-* Query SQL
+---
+
+# Development Flow
+
+## Phase 1
+
+Database Design
+
+* Create Database
+* Create Tables
+* Foreign Keys
+* Relationships
+
+---
+
+## Phase 2
+
+Master Data
+
+* Roles
+* Permissions
+* Role Permissions
+
+---
+
+## Phase 3
+
+Authentication
+
 * Login
+* Logout
+* Password Hashing
 * Session
-* Validasi
-* HTML
-* Logika bisnis aplikasi
 
-Dengan demikian setiap class memiliki satu tanggung jawab (Single Responsibility Principle), sehingga kode lebih mudah dipelihara dan dikembangkan.
+---
+
+## Phase 4
+
+Authorization
+
+RBAC
+
+```
+Users
+   │
+User Roles
+   │
+Roles
+   │
+Role Permissions
+   │
+Permissions
+```
+
+---
+
+## Phase 5
+
+Dashboard
+
+Dashboard akan ditampilkan sesuai permission pengguna.
+
+---
+
+## Phase 6
+
+Library Visit Module
+
+* Input Kunjungan
+* Edit Kunjungan
+* Hapus Kunjungan
+* Lihat Riwayat
+* Laporan
+
+---
+
+# Database Tables
+
+## Security
+
+* users
+* roles
+* permissions
+* user_roles
+* role_permissions
+
+---
+
+## Human Profile
+
+* students
+* teachers
+
+---
+
+## Academic
+
+* classrooms
+* academic_years
+* student_academics
+
+---
+
+## Library
+
+* library_visits
+
+---
+
+# RBAC Concept
+
+Role menentukan sekumpulan hak akses.
+
+Permission menentukan aksi yang boleh dilakukan.
+
+Contoh:
+
+```
+Admin
+
+users.create
+users.update
+users.delete
+
+roles.create
+roles.update
+
+permissions.create
+
+visits.create
+visits.update
+reports.export
+```
+
+Sedangkan:
+
+```
+Librarian
+
+visits.create
+visits.update
+visits.delete
+
+reports.view
+reports.export
+```
+
+---
+
+# Coding Standard
+
+Semua query SQL berada di Model.
+
+Controller tidak boleh menulis SQL.
+
+View tidak boleh mengakses database.
+
+Semua halaman harus melewati Middleware.
+
+Semua autentikasi menggunakan Session.
+
+Semua password menggunakan:
+
+```
+password_hash()
+
+password_verify()
+```
+
+Semua hak akses menggunakan:
+
+```
+hasPermission()
+```
+
+bukan
+
+```
+$_SESSION['role']
+```
+
+---
+
+# Development Roadmap
+
+## Database
+
+* [x] Database
+* [x] Tables
+* [x] Roles
+* [x] Permissions
+* [x] Role Permissions
+
+---
+
+## Authentication
+
+* [ ] Database Class
+* [ ] BaseModel
+* [ ] User Model
+* [ ] Login
+* [ ] Logout
+* [ ] Session
+
+---
+
+## Authorization
+
+* [ ] Auth Helper
+* [ ] Middleware
+* [ ] Permission Helper
+
+---
+
+## Dashboard
+
+* [ ] Dashboard UI
+* [ ] Dynamic Menu
+* [ ] Profile
+
+---
+
+## Library
+
+* [ ] Digital Visit Form
+* [ ] Visit History
+* [ ] Search
+* [ ] Reports
+* [ ] Export
+
+---
+
+# Coding Principles
+
+* Don't Repeat Yourself (DRY)
+* Separation of Concerns (SoC)
+* Single Responsibility Principle (SRP)
+* MVC Pattern
+* Object-Oriented Programming (OOP)
+* Role-Based Access Control (RBAC)
+
+---
+
+# Future Development
+
+* Book Management
+* Borrowing System
+* Returning System
+* QR Code Check-In
+* Visitor Statistics
+* Notification System
+* REST API
+* Laravel Migration
+
+---
+
+# Learning Objectives
+
+Melalui proyek ini diharapkan memahami:
+
+* PHP Native
+* OOP
+* MVC
+* MySQL
+* Database Design
+* Authentication
+* Authorization
+* Session
+* RBAC
+* Clean Code
+* Software Architecture
+
+---
+
+# Final Goal
+
+Membangun sistem perpustakaan sekolah yang aman, modular, mudah dikembangkan, dan dapat dijadikan portofolio profesional sebagai Full Stack Web Developer.
